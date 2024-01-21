@@ -16,8 +16,6 @@ export default function Post() {
 
     const isAuthor = post && userData ? post.userid === userData.userData.$id : false;
 
-    console.log(post, userData);
-
     const [like, setLike] = useState(0);
     const [dislike, setDislike] = useState(0);
     const [comments, setComments] = useState([]);
