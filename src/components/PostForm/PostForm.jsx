@@ -42,7 +42,6 @@ export default function PostForm({ post }) {
                 data.capturedImage = fileId;
                 const dbPost = await appwriteService.createPost({uploadedBy:userData.userData.name, userid: userData.userData.$id, likeCnt: 0, dislikeCnt: 0, commentss: [], 
                     commentsCnt: 0, ...data, });
-                console.log(userData)
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
                 }
