@@ -36,17 +36,15 @@ export default function PostForm({ post }) {
             }
         } else {
             const file = await appwriteService.uploadFile(data.image[0]);
-
-            if (file) {
+             if (file) {
                 const fileId = file.$id;
                 data.capturedImage = fileId;
                 const dbPost = await appwriteService.createPost({uploadedBy:userData.userData.name, userid: userData.userData.$id, likeCnt: 0, dislikeCnt: 0, commentss: [], 
                     commentsCnt: 0, ...data, });
-                console.log(userData)
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
                 }
-            }
+             }
         }
     };
 

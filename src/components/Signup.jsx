@@ -81,6 +81,7 @@ function Signup() {
                                 required: true,
                             })}
                         />
+                        <p className="text-black" >Password must be at least 8 characters</p>
                         <Button btnText="Create Account" type="submit" className="w-full">
 
                         </Button>
