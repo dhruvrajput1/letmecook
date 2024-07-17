@@ -12,11 +12,13 @@ export default function Post() {
 
     const userData = useSelector((state) => state.auth.userData);
 
+    // console.log("userDataaaaa", userData)
+
     const isAuthenticated = useSelector((state) => state.auth.status);
 
-    const isAuthor = post && userData ? post.userid === userData.userData.$id : false;
+    const isAuthor = post && userData ? post.userid === userData.$id : false;
 
-    console.log(post, userData);
+    // console.log(post, userData);
 
     const [like, setLike] = useState(0);
     const [dislike, setDislike] = useState(0);
@@ -41,8 +43,8 @@ export default function Post() {
         } else navigate("/");
     }, [slug, navigate]);
 
-    const deletePost = () => {
-        appwriteService.deletePost(post.$id).then((status) => {
+    const deletePost = async () => {
+        await appwriteService.deletePost(post.$id).then((status) => {
             if (status) {
                 appwriteService.deleteFile(post.capturedImage);
                 navigate("/");
@@ -54,10 +56,10 @@ export default function Post() {
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
 
-    const handleLikeClick = () => {
+    const handleLikeClick = async () => {
         if (liked === false && disliked === false) {
             setLike(like + 1);
-            appwriteService.updatePost(post.$id, {
+            await appwriteService.updatePost(post.$id, {
                 likeCnt: post.likeCnt + 1,
             });
             setLiked(true);
@@ -66,7 +68,7 @@ export default function Post() {
         else if (liked === false && disliked === true) {
             setDislike(dislike - 1);
             setLike(like + 1);
-            appwriteService.updatePost(post.$id, {
+            await appwriteService.updatePost(post.$id, {
                 likeCnt: post.likeCnt + 1,
                 dislikeCnt: post.dislikeCnt - 1,
             });
@@ -75,11 +77,11 @@ export default function Post() {
         }
     }
 
-    const handleDislikeClick = () => {
+    const handleDislikeClick = async () => {
         if (disliked === false && liked === false) {
             setDisliked(true);
             setDislike(dislike + 1);
-            appwriteService.updatePost(post.$id, {
+            await appwriteService.updatePost(post.$id, {
                 dislikeCnt: post.dislikeCnt + 1,
             });
             setLiked(false);
@@ -88,7 +90,7 @@ export default function Post() {
             setDisliked(true);
             setDislike(dislike + 1);
             setLike(like - 1);
-            appwriteService.updatePost(post.$id, {
+            await appwriteService.updatePost(post.$id, {
                 dislikeCnt: post.dislikeCnt + 1,
                 likeCnt: post.likeCnt - 1
             });
@@ -96,10 +98,7 @@ export default function Post() {
         }
     }
 
-
-
-
-    const userName = userData ? userData.userData.name : "Anonymous";
+    const userName = userData?.userData?.name;
 
 
     const handleSubmit = async (e) => {
@@ -131,13 +130,14 @@ export default function Post() {
             })
             .then((updatedPost) => {
                 // Handle success, if needed
-                console.log("Post updated with new comment", updatedPost);
+                // console.log("Post updated with new comment", updatedPost);
                 setPost(updatedPost); // Update the local post state with the latest data
             })
             .catch((error) => {
                 // Handle error
                 console.error("Error updating post with new comment", error);
             });
+
 
         // Clear the textarea after submitting a comment
         e.target[0].value = '';
